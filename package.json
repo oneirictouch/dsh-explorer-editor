@@ -2,6 +2,16 @@
   "name": "dsh-explorer-editor",
   "version": "0.8.0",
   "description": "A VS Code-style file manager plugin for DeepSeek Harness Web — DeepSeek Harness 的 VS Code 风格文件管理器插件（浏览、打开、编辑当前对话工作区的文件）.",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "file-manager",
+    "file-explorer",
+    "editor",
+    "monaco",
+    "markdown"
+  ],
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
