@@ -52,11 +52,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/chengzhi43/dsh-explorer-editor.git"
+    "url": "https://github.com/oneirictouch/dsh-explorer-editor.git"
   },
-  "homepage": "https://github.com/chengzhi43/dsh-explorer-editor#readme",
+  "homepage": "https://github.com/oneirictouch/dsh-explorer-editor#readme",
   "bugs": {
-    "url": "https://github.com/chengzhi43/dsh-explorer-editor/issues"
+    "url": "https://github.com/oneirictouch/dsh-explorer-editor/issues"
   },
   "license": "MIT"
 }

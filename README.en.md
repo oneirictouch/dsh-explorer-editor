@@ -3,19 +3,19 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/chengzhi43/dsh-explorer-editor">GitHub</a> ·
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor">GitHub</a> ·
   <a href="#installation">Installation</a> ·
   <a href="#themes">Theme import/export</a> ·
   <a href="#faq">FAQ</a> ·
-  <a href="https://github.com/chengzhi43/dsh-explorer-editor/issues">Issues</a> ·
-  <a href="https://github.com/chengzhi43/dsh-explorer-editor/releases">Releases</a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/issues">Issues</a> ·
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases">Releases</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/chengzhi43/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.7.0-0969da?style=flat" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.8.0-0969da?style=flat" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4dabf7?style=flat" />
-  <a href="https://github.com/chengzhi43/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/chengzhi43/dsh-explorer-editor?style=flat&label=stars" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/oneirictouch/dsh-explorer-editor?style=flat&label=stars" /></a>
   <img alt="editor" src="https://img.shields.io/badge/editor-Monaco-7ee787?style=flat" />
   <img alt="workspace" src="https://img.shields.io/badge/workspace-current%20conversation-green?style=flat" />
 </p>
@@ -70,10 +70,10 @@ After installing, **fully quit and relaunch the desktop app** (quit the applicat
 dsh plugin --profile web add dsh-explorer-editor
 ```
 
-Or download the tarball from [Releases](https://github.com/chengzhi43/dsh-explorer-editor/releases) and install it locally (use `--profile desktop` for the desktop app):
+Or download the tarball from [Releases](https://github.com/oneirictouch/dsh-explorer-editor/releases) and install it locally (use `--profile desktop` for the desktop app):
 
 ```sh
-dsh plugin --profile web add ./dsh-explorer-editor-0.7.0.tgz
+dsh plugin --profile web add ./dsh-explorer-editor-0.8.0.tgz
 ```
 
 ### Configuration
