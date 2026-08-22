@@ -9,7 +9,7 @@
  */
 import { isInsideRoot } from './paths.ts';
 
-export const SNAPSHOT_KEY = 'dsh-file-editor-session';
+export const SNAPSHOT_KEY = 'dsh-explorer-editor-session';
 /** Content budget per tab: larger files persist their path only (re-read on restore). */
 export const MAX_PERSIST_CONTENT = 262144; // 256 KiB
 

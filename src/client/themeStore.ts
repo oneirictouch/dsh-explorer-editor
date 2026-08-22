@@ -103,7 +103,7 @@ export function themeChrome(theme: EditorThemeSettings): EditorThemeChrome {
 
 // v2: default theme is now light, and the key is versioned so existing dark
 // preferences from the previous build do not override the new default.
-const STORAGE_KEY = 'dsh-file:editor-theme:v2';
+const STORAGE_KEY = 'dsh-explorer-editor:editor-theme:v2';
 
 const HEX6 = /^#[0-9a-f]{6}$/i;
 
@@ -195,7 +195,7 @@ export interface ImportedTheme {
 export function exportThemeText(theme: EditorThemeSettings, name: string): string {
   return JSON.stringify({
     name,
-    type: 'dsh-file-theme',
+    type: 'dsh-explorer-editor-theme',
     version: 1,
     background: theme.background,
     foreground: theme.foreground,

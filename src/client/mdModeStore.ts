@@ -14,7 +14,7 @@ export type MdViewMode = 'preview' | 'source';
 export const DEFAULT_MD_MODE: MdViewMode = 'source';
 
 /** localStorage key (versioned to allow future migrations). */
-export const MD_MODE_STORAGE_KEY = 'dsh-file:md-mode:v2';
+export const MD_MODE_STORAGE_KEY = 'dsh-explorer-editor:md-mode:v2';
 
 const VALID: ReadonlySet<string> = new Set(['preview', 'source']);
 

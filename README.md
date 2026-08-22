@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.8.0-0969da?style=flat" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.9.0-0969da?style=flat" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4dabf7?style=flat" />
   <a href="https://github.com/oneirictouch/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/oneirictouch/dsh-explorer-editor?style=flat&label=stars" /></a>
@@ -71,7 +71,7 @@ dsh plugin --profile web add dsh-explorer-editor
 或从 [Releases](https://github.com/oneirictouch/dsh-explorer-editor/releases) 页面下载 tarball 后本地安装（桌面端把 `--profile web` 换成 `--profile desktop`）：
 
 ```sh
-dsh plugin --profile web add ./dsh-explorer-editor-0.8.0.tgz
+dsh plugin --profile web add ./dsh-explorer-editor-0.9.0.tgz
 ```
 
 ### 配置
@@ -117,14 +117,14 @@ dsh plugin --profile web add ./dsh-explorer-editor-0.8.0.tgz
 
 1. 打开文件编辑器（中间列"文件"视图）。
 2. 点击工具栏 **主题** 按钮，打开主题设置面板。
-3. 点击 **导出主题**，浏览器会下载一个 `dsh-file-theme-YYYY-MM-DD.json` 文件。
+3. 点击 **导出主题**，浏览器会下载一个 `dsh-explorer-editor-theme-YYYY-MM-DD.json` 文件。
 
 导出的 JSON 同时包含本插件字段与 VS Code workbench `colors` 字段：
 
 ```json
 {
   "name": "dsh-explorer-editor · One Dark",
-  "type": "dsh-file-theme",
+  "type": "dsh-explorer-editor-theme",
   "version": 1,
   "background": "#282c34",
   "foreground": "#abb2bf",
@@ -214,7 +214,7 @@ curl -X POST http://127.0.0.1:3080/api/fileManager/getRoot \
 ## 常见问题
 
 - **RPC 返回 not found**：几乎总是 `@deepseek-ai/dsh-typert-protocol` 双实例问题——检查插件 `node_modules/@deepseek-ai` 是否是 symlink（`ls -la node_modules/@deepseek-ai`），不是则按上文建立链接后重启。
-- **编辑器空白**：Monaco 从 CDN 加载（jsDelivr → unpkg → Fastly 依次回退，可用 localStorage 键 `dsh-file:monaco-mirror` 指定私有镜像），全部不可达时降级为纯文本 textarea。
+- **编辑器空白**：Monaco 从 CDN 加载（jsDelivr → unpkg → Fastly 依次回退，可用 localStorage 键 `dsh-explorer-editor:monaco-mirror` 指定私有镜像），全部不可达时降级为纯文本 textarea。
 - **打开的是错误的目录**：确认当前会话的工作区目录正确（侧边栏标题显示目录名）。文件管理器打开时自动 `setRoot` 到当前会话的 `cwd`；若打开前无会话，则回退到 `cordis.patch.yml` 的 `root`。
 - **插件改了不生效**：host 半改动需重启 `dsh web`；client 半 bundle 改动后刷新页面即可（rev 变化触发重新加载）。
 

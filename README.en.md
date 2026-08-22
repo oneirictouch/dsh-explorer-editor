@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.8.0-0969da?style=flat" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.9.0-0969da?style=flat" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4dabf7?style=flat" />
   <a href="https://github.com/oneirictouch/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/oneirictouch/dsh-explorer-editor?style=flat&label=stars" /></a>
@@ -73,7 +73,7 @@ dsh plugin --profile web add dsh-explorer-editor
 Or download the tarball from [Releases](https://github.com/oneirictouch/dsh-explorer-editor/releases) and install it locally (use `--profile desktop` for the desktop app):
 
 ```sh
-dsh plugin --profile web add ./dsh-explorer-editor-0.8.0.tgz
+dsh plugin --profile web add ./dsh-explorer-editor-0.9.0.tgz
 ```
 
 ### Configuration
@@ -119,14 +119,14 @@ The theme panel (the "Theme" button in the editor toolbar) can export the curren
 
 1. Open the file editor (the "Files" view in the center column).
 2. Click the **Theme** button in the toolbar to open the settings panel.
-3. Click **Export theme** — the browser downloads a `dsh-file-theme-YYYY-MM-DD.json` file.
+3. Click **Export theme** — the browser downloads a `dsh-explorer-editor-theme-YYYY-MM-DD.json` file.
 
 The exported JSON carries both the plugin's flat fields and VS Code workbench `colors`:
 
 ```json
 {
   "name": "dsh-explorer-editor · One Dark",
-  "type": "dsh-file-theme",
+  "type": "dsh-explorer-editor-theme",
   "version": 1,
   "background": "#282c34",
   "foreground": "#abb2bf",
@@ -217,7 +217,7 @@ curl -X POST http://127.0.0.1:3080/api/fileManager/getRoot \
 <a id="faq"></a>
 
 - **RPC returns not found**: almost always the `@deepseek-ai/dsh-typert-protocol` dual-instance problem — check whether the plugin's `node_modules/@deepseek-ai` is a symlink (`ls -la node_modules/@deepseek-ai`); if not, create the link as described above and restart.
-- **Blank editor**: Monaco loads from a CDN (jsDelivr → unpkg → Fastly, tried in order; set the localStorage key `dsh-file:monaco-mirror` to use a private mirror). If all mirrors are unreachable it falls back to a plain textarea.
+- **Blank editor**: Monaco loads from a CDN (jsDelivr → unpkg → Fastly, tried in order; set the localStorage key `dsh-explorer-editor:monaco-mirror` to use a private mirror). If all mirrors are unreachable it falls back to a plain textarea.
 - **Wrong directory opened**: verify the current session's workspace directory (the sidebar title shows the directory name). The file manager auto-runs `setRoot` to the current session's `cwd`; without a session it falls back to `cordis.patch.yml`'s `root`.
 - **Plugin changes have no effect**: host-half changes require restarting `dsh web`; client-half bundle changes only need a page refresh (a rev change triggers a reload).
 

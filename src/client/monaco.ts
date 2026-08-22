@@ -21,7 +21,7 @@ const MONACO_MIRRORS = [
 ];
 
 /** Optional user override (set in localStorage) to prefer a private mirror. */
-const MONACO_MIRROR_OVERRIDE_KEY = 'dsh-file:monaco-mirror';
+const MONACO_MIRROR_OVERRIDE_KEY = 'dsh-explorer-editor:monaco-mirror';
 
 declare global {
   interface Window {
