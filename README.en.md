@@ -86,7 +86,10 @@ The `root` in `cordis.patch.yml` is only the **fallback root when there is no se
       name: 'dsh-explorer-editor'
       config:
         root: !!js process.cwd()   # fallback root only, before the file manager pins the session workspace
+        allowArbitraryRoot: false  # whether setRoot may escape root (see below)
 ```
+
+> **Security boundary**: `allowArbitraryRoot` defaults to `false`, which restricts `setRoot` to directories under `root`, preventing the RPC from reading files outside the workspace. If your session workspace can live outside `root`, set it to `true` (equivalent to the old behavior). All file operations still respect the workspace boundary — any path escaping the currently pinned root is rejected (including symlink escapes).
 
 ## Features
 
@@ -98,11 +101,13 @@ The `root` in `cordis.patch.yml` is only the **fallback root when there is no se
 - **Theme import/export**: export the current theme to a JSON file and import it back, just like VS Code, to migrate your colors between environments (see [Theme import/export](#themes))
 - **Edit & save**: Ctrl+S or the "Save" button in the editor, dirty marker (●); multiple open files switch via the top tab strip, each tab has a ✕ close button
 - **File operations**: create file, create directory, rename, delete (delete requires confirmation; non-empty directories are rejected)
+- **Keyboard navigation**: the file tree is keyboard-navigable — ↑/↓ move the selection, → expands a collapsed directory, ← collapses an expanded one, Enter/Space opens a file or toggles a directory (VS Code Explorer-like)
 - **Right-click context menu (VS Code style)**: right-click a file/directory for **Cut / Copy / Rename / Delete / Copy Path / Copy Relative Path**; right-click a directory or blank tree area to additionally **Paste** (cut → move, copy → recursive copy, existing targets are not overwritten). Delete asks for confirmation and rejects non-empty directories. Cut sources are dimmed; the clipboard survives panel switches (lost on page reload)
 - **Encoding auto-detection**: text files are read as UTF-8 first, falling back to **GBK/GB2312** when the bytes are not valid UTF-8 (common for Windows-generated logs/exports) — no more garbled Chinese. Saving the file normalizes it to UTF-8
 - **Session restore (survives reloads)**: open tabs and **unsaved edits** persist to localStorage automatically — refresh the page and the last tabs (with unsaved changes) come back. Files larger than 256KB restore their tab only and re-read content from disk; tabs never leak across workspaces; storage is per-browser
 - **Live tree refresh (SSE push)**: the host watches the workspace with recursive `fs.watch` and pushes filesystem changes to the browser over SSE — the tree reloads only the affected directories (VS Code Explorer-like). Refocusing the window triggers a full backstop refresh
 - **Workspace boundary**: every path resolves against the currently pinned `root`; escaping paths are rejected by the host (including symlink-escape protection)
+- **Bilingual UI**: every UI string is localized through the locale dictionary (`dshFile` namespace, zh/en) and follows the DSH language — no more mixed Chinese/English
 
 ## Theme import/export
 
@@ -158,13 +163,15 @@ The plugin has two halves sharing the package name `dsh-explorer-editor`:
 
 ### Host ↔ Client communication (Typert Remote)
 
-Browsers cannot touch the filesystem directly, so the host half exposes file operations as RPC endpoints (namespace `fileManager`: `listDir` / `readText` / `writeText` / `createFile` / `createDirectory` / `rename` / `copy` / `delete` / `stat` / `resolve` / `getRoot` / `setRoot`). The client mounts the call surface with `ctx.remote.$mount(TYPERT_REMOTE)` and resolves the service via `ctx.get('remote.fileManager')`. `setRoot` re-pins the gateway root to the current session's workspace directory.
+Browsers cannot touch the filesystem directly, so the host half exposes file operations as RPC endpoints (namespace `fileManager`: `listDir` / `readText` / `readDataUrl` / `writeText` / `createFile` / `createDirectory` / `rename` / `copy` / `delete` / `stat` / `resolve` / `getRoot` / `setRoot`). The client mounts the call surface with `ctx.remote.$mount(TYPERT_REMOTE)` and resolves the service via `ctx.get('remote.fileManager')`. `setRoot` re-pins the gateway root to the current session's workspace directory.
 
 **Key constraint (SRC descriptor contract)**: the Typert gateway derives wire parameter names from method signatures via `Function.prototype.toString` — host methods must use **flat parameters** (`listDir(path: string)`, not `listDir(input: {...})`); the parameter names are the wire fields the client sends. Both halves must use identical names.
 
 ### Panel toggle mechanism
 
 The sidebar main area is the single-seat `sidebar.workspaces` slot (occupied by the workspace browser at priority 0). The plugin registers its own shadow entry at `priority: -1` when the button is clicked — a single-seat slot renders the lowest-priority live entry, so the file manager wins the cell; closing disposes the entry and the workspace browser returns. After clicking a file in the tree, the editor renders in the "Files" view registered in `conversation.view` — the session scroll area of the center column (alongside chat / trajectory), entered via the "Files" tab in the session header, never a popup.
+
+**Base-package patch**: the `sidebar.workspaces.tabs` slot must be hosted by the workspace browser bundle (`@deepseek-ai/dsh-client-ui-workspace/lib/client.js`) — declare the sub-slot in the `children` of the `sidebar.workspaces` registration, inject the slot's subscribe/getSnapshot in `browserInjected`, and render the slot in place of `sectionLabel` in the `WorkspaceBrowser` header using `useSyncExternalStore` to check `hasTabs`. Upgrading dsh overwrites that file, so the patch must be re-applied after an upgrade (local backups live under `dsh-tools/backup/` as `dsh-client-ui-workspace.client.js.bak-*`). Without the patch the plugin falls back to the sidebar-footer "Files" button.
 
 ### Dependency resolution (important)
 
@@ -188,7 +195,7 @@ At startup `dsh` maintains a flat symlink fallback at `$DSH_HOME/profiles/node_m
 ```sh
 npm install                       # esbuild + typescript + types
 node build.mjs                    # build host (tsc) + client bundle (esbuild)
-node build.mjs --watch            # watch client only (rerun for host changes)
+node build.mjs --watch            # watch host (tsc --watch) + client (esbuild)
 ```
 
 Build outputs:
@@ -210,7 +217,7 @@ curl -X POST http://127.0.0.1:3080/api/fileManager/getRoot \
 <a id="faq"></a>
 
 - **RPC returns not found**: almost always the `@deepseek-ai/dsh-typert-protocol` dual-instance problem — check whether the plugin's `node_modules/@deepseek-ai` is a symlink (`ls -la node_modules/@deepseek-ai`); if not, create the link as described above and restart.
-- **Blank editor**: Monaco loads from the jsdelivr CDN; in intranet environments configure a local mirror or wait for the textarea fallback.
+- **Blank editor**: Monaco loads from a CDN (jsDelivr → unpkg → Fastly, tried in order; set the localStorage key `dsh-file:monaco-mirror` to use a private mirror). If all mirrors are unreachable it falls back to a plain textarea.
 - **Wrong directory opened**: verify the current session's workspace directory (the sidebar title shows the directory name). The file manager auto-runs `setRoot` to the current session's `cwd`; without a session it falls back to `cordis.patch.yml`'s `root`.
 - **Plugin changes have no effect**: host-half changes require restarting `dsh web`; client-half bundle changes only need a page refresh (a rev change triggers a reload).
 

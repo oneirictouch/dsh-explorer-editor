@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#66BB6A"/>
+      <stop offset="1" stop-color="#2E7D32"/>
+    </linearGradient>
+  </defs>
+  <!-- rounded app-icon background -->
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#bg)"/>
+  <!-- white tree silhouette -->
+  <path d="M128 12 L170 132 H86 Z" fill="#ffffff"/>
+  <path d="M128 52 L194 172 H62 Z" fill="#ffffff"/>
+  <path d="M128 92 L220 212 H36 Z" fill="#ffffff"/>
+  <rect x="116" y="212" width="24" height="32" rx="6" fill="#ffffff"/>
+</svg>

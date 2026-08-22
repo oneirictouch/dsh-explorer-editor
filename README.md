@@ -161,7 +161,7 @@ dsh plugin --profile web add ./dsh-explorer-editor-0.8.0.tgz
 
 ### Host ↔ Client 通信（Typert Remote）
 
-浏览器不能直接访问文件系统，所以 host 半把文件操作暴露为 RPC 端点（namespace `fileManager`：`listDir` / `readText` / `writeText` / `createFile` / `createDirectory` / `rename` / `delete` / `stat` / `resolve` / `getRoot` / `setRoot`）。客户端通过 `ctx.remote.$mount(TYPERT_REMOTE)` 挂载调用面，再用 `ctx.get('remote.fileManager')` 解析服务后调用。`setRoot` 用于把网关根目录重新固定到当前会话的工作区目录。
+浏览器不能直接访问文件系统，所以 host 半把文件操作暴露为 RPC 端点（namespace `fileManager`：`listDir` / `readText` / `readDataUrl` / `writeText` / `createFile` / `createDirectory` / `rename` / `copy` / `delete` / `stat` / `resolve` / `getRoot` / `setRoot`）。客户端通过 `ctx.remote.$mount(TYPERT_REMOTE)` 挂载调用面，再用 `ctx.get('remote.fileManager')` 解析服务后调用。`setRoot` 用于把网关根目录重新固定到当前会话的工作区目录。
 
 **关键约束（SRC descriptor 契约）**：Typert gateway 用 `Function.prototype.toString` 从方法签名提取 wire 参数名——所以 host 方法必须用**扁平参数**（`listDir(path: string)`，不是 `listDir(input: {...})`），参数名即客户端发送的字段名。两半的命名必须一致。
 
@@ -193,7 +193,7 @@ ln -s ~/.dsh/profiles/node_modules/@deepseek-ai node_modules/@deepseek-ai
 ```sh
 npm install                       # esbuild + typescript + 类型
 node build.mjs                    # 构建 host (tsc) + client bundle (esbuild)
-node build.mjs --watch            # 只 watch client（host 改动需重跑）
+node build.mjs --watch            # watch host (tsc --watch) + client (esbuild)
 ```
 
 构建产物：
@@ -214,7 +214,7 @@ curl -X POST http://127.0.0.1:3080/api/fileManager/getRoot \
 ## 常见问题
 
 - **RPC 返回 not found**：几乎总是 `@deepseek-ai/dsh-typert-protocol` 双实例问题——检查插件 `node_modules/@deepseek-ai` 是否是 symlink（`ls -la node_modules/@deepseek-ai`），不是则按上文建立链接后重启。
-- **编辑器空白**：Monaco 从 jsdelivr CDN 加载，内网环境需配置本地镜像或等待 textarea 降级。
+- **编辑器空白**：Monaco 从 CDN 加载（jsDelivr → unpkg → Fastly 依次回退，可用 localStorage 键 `dsh-file:monaco-mirror` 指定私有镜像），全部不可达时降级为纯文本 textarea。
 - **打开的是错误的目录**：确认当前会话的工作区目录正确（侧边栏标题显示目录名）。文件管理器打开时自动 `setRoot` 到当前会话的 `cwd`；若打开前无会话，则回退到 `cordis.patch.yml` 的 `root`。
 - **插件改了不生效**：host 半改动需重启 `dsh web`；client 半 bundle 改动后刷新页面即可（rev 变化触发重新加载）。
 
