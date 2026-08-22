@@ -60,7 +60,7 @@ cd /path/to/dsh-explorer-editor
 dsh plugin --profile desktop add .
 ```
 
-After installing, **fully quit and relaunch the desktop app** (quit the application, not just close the window); `dsh-explorer-editor` will then show up in the sidebar footer "Files" button and in Settings → Plugins.
+After installing, **fully quit and relaunch the desktop app** (quit the application, not just close the window); `dsh-explorer-editor` will then show up in the sidebar "Workspace / Files" tabs and in Settings → Plugins.
 
 > Note: do not add plugins to `~/.dsh/profiles/desktop/cordis.yml` — the desktop client rewrites it to an empty list `[]` on every startup. The correct entry point is `dsh.profile.bundles` + `dependencies` in the profile's `package.json` (which is exactly what `dsh plugin add` does).
 
@@ -93,7 +93,7 @@ The `root` in `cordis.patch.yml` is only the **fallback root when there is no se
 
 ## Features
 
-- **"Files" button at the sidebar footer**: toggles the sidebar body into the file manager (file tree) and back to the workspace/session list
+- **"Workspace / Files" tabs in the sidebar header**: the tab strip renders in the workspace browser's header row (replacing the "Workspace" label); clicking "Files" switches the sidebar body to the file manager (file tree), clicking "Workspace" returns to the workspace/session list
 - **Workspace follows the active conversation**: opening the file manager resolves the current session's workspace directory (`SessionHeader.cwd`) and re-pins the gateway root via `setRoot` — no longer the directory `dsh web` was launched from
 - **Center-column editor (view tab)**: the editor is registered as a `conversation.view` view ("Files" tab, alongside Chat/Trajectory). Clicking a file opens it **inside the session scroll area of the page** (not a popup): Monaco Editor (the same kernel VS Code uses, loaded from CDN) with extension-based syntax highlighting; falls back to a plain textarea when the CDN is unreachable
 - **Markdown preview**: `.md` files open in **source mode (editable) by default**; a VS Code-style **preview/source toggle button** sits next to the "Theme" button in the toolbar (shown only for Markdown files) to switch to a **read-only rendered preview** (marked + GFM: headings, lists, tables, task lists, code blocks). The chosen mode is remembered (localStorage) and reused on the next open
@@ -103,7 +103,7 @@ The `root` in `cordis.patch.yml` is only the **fallback root when there is no se
 - **File operations**: create file, create directory, rename, delete (delete requires confirmation; non-empty directories are rejected)
 - **Keyboard navigation**: the file tree is keyboard-navigable — ↑/↓ move the selection, → expands a collapsed directory, ← collapses an expanded one, Enter/Space opens a file or toggles a directory (VS Code Explorer-like)
 - **Right-click context menu (VS Code style)**: right-click a file/directory for **Cut / Copy / Rename / Delete / Copy Path / Copy Relative Path**; right-click a directory or blank tree area to additionally **Paste** (cut → move, copy → recursive copy, existing targets are not overwritten). Delete asks for confirmation and rejects non-empty directories. Cut sources are dimmed; the clipboard survives panel switches (lost on page reload)
-- **Encoding auto-detection**: text files are read as UTF-8 first, falling back to **GBK/GB2312** when the bytes are not valid UTF-8 (common for Windows-generated logs/exports) — no more garbled Chinese. Saving the file normalizes it to UTF-8
+- **Encoding auto-detection**: text files are read as UTF-8 first, falling back to **GBK/GB2312** when the bytes are not valid UTF-8 (common for Windows-generated logs/exports; falls back further to latin1 on non-full-ICU builds) — no more garbled Chinese. Saving the file normalizes it to UTF-8
 - **Session restore (survives reloads)**: open tabs and **unsaved edits** persist to localStorage automatically — refresh the page and the last tabs (with unsaved changes) come back. Files larger than 256KB restore their tab only and re-read content from disk; tabs never leak across workspaces; storage is per-browser
 - **Live tree refresh (SSE push)**: the host watches the workspace with recursive `fs.watch` and pushes filesystem changes to the browser over SSE — the tree reloads only the affected directories (VS Code Explorer-like). Refocusing the window triggers a full backstop refresh
 - **Workspace boundary**: every path resolves against the currently pinned `root`; escaping paths are rejected by the host (including symlink-escape protection)
