@@ -1,0 +1,24 @@
+# dsh-explorer-editor bundle patch: registers the file manager plugin.
+#
+# A single loader row: `name: dsh-explorer-editor` resolves the package main
+# (dist/index.js), whose default export is the FileManagerGateway
+# (TypertRemoteService) class — the host half. The browser half is discovered
+# automatically: dsh-client-modules scans loader entries whose package
+# declares `dsh.client` + `exports["./client"]`, and this package does, so
+# dist/client.js is served at /plugins/dsh-explorer-editor/client.js and
+# seeded into window.__DSH_BOOT__.
+#
+# `root` is only the FALLBACK root before a session pins one: when the file
+# manager opens, the browser resolves the current conversation's workspace
+# directory (SessionHeader.cwd) and re-pins the gateway root via the
+# `setRoot` RPC, so the tree always reflects the ACTIVE session's workspace
+# rather than the directory `dsh web` was launched from. Paths outside the
+# currently pinned root are rejected by the host.
+- insert:
+    - id: dsh-explorer-editor
+      name: 'dsh-explorer-editor'
+      config:
+        root: !!js process.cwd()
+        # 默认 false：setRoot 只能把根固定到 root 之下，防止越界读取。
+        # 若当前会话工作区可能位于 root 之外，改为 true（等价于旧行为）。
+        allowArbitraryRoot: false

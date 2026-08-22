@@ -1,0 +1,831 @@
+/* dsh-explorer-editor plugin styles. Kept dependency-free: plain CSS with DSH design
+ * tokens where available, sensible fallbacks elsewhere. */
+
+/* ── sidebar tree panel ─────────────────────────────────────────────────── */
+
+.dshf-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  font-size: 13px;
+  color: var(--dsw-alias-label-primary, #1f2328);
+}
+
+.dshf-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.08));
+  flex: none;
+}
+
+.dshf-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.dshf-spacer {
+  flex: 1;
+}
+
+.dshf-btn {
+  background: transparent;
+  border: 1px solid var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.15));
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  line-height: 1.5;
+}
+.dshf-btn:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.05));
+}
+.dshf-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* 纯图标按钮（工具条）：DSH 风格的无边框 ghost 图标按钮 */
+.dshf-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-color: transparent;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+/* 页面内确认弹层（替代 window.confirm，桌面端 Electron 不支持原生弹框） */
+.dshf-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dshf-modal {
+  min-width: 260px;
+  max-width: 360px;
+  background: var(--dsw-alias-bg-overlay, #ffffff);
+  color: var(--dsw-alias-label-primary, #1f2328);
+  border: 1px solid var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.15));
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  padding: 14px 16px;
+}
+.dshf-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dshf-modal-body {
+  font-size: 13px;
+  color: var(--dsw-alias-label-secondary, #495057);
+  margin-bottom: 14px;
+  word-break: break-all;
+}
+.dshf-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+/* 次级按钮（取消）：给可见边框与浅底色，确保与主按钮（删除）区分、深浅主题下都可见 */
+.dshf-modal-actions .dshf-btn:not(.dshf-btn-danger) {
+  background: var(--dsw-alias-bg-layer-2, #f0f1f3);
+  border: 1px solid var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.3));
+  color: var(--dsw-alias-label-primary, #1f2328);
+  padding: 4px 14px;
+}
+.dshf-modal-actions .dshf-btn:not(.dshf-btn-danger):hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.08));
+}
+.dshf-modal-actions .dshf-btn-danger {
+  padding: 4px 14px;
+}
+.dshf-btn-danger {
+  background: var(--dsw-alias-danger-fg, #c92a2a);
+  border-color: transparent;
+  color: #ffffff;
+}
+.dshf-btn-danger:hover {
+  background: var(--dsw-alias-danger-fg, #c92a2a);
+  filter: brightness(1.1);
+}
+
+.dshf-error {
+  padding: 8px 12px;
+  color: var(--dsw-alias-danger-fg, #c92a2a);
+  font-size: 12px;
+}
+
+.dshf-tree-pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.dshf-tree-scroll {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 4px 0;
+}
+
+.dshf-tree-list {
+  min-width: max-content;
+}
+
+.dshf-tree-hint {
+  padding: 4px 12px;
+  color: var(--dsw-alias-label-tertiary, #868e96);
+  font-size: 12px;
+}
+
+.dshf-node {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  min-height: 22px;
+}
+.dshf-node:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.05));
+}
+.dshf-selected {
+  background: var(--dsw-alias-interactive-bg-selected, rgba(77, 171, 247, 0.15));
+}
+
+.dshf-caret {
+  width: 12px;
+  flex: none;
+  font-size: 10px;
+  color: var(--dsw-alias-label-tertiary, #868e96);
+}
+
+.dshf-icon {
+  flex: none;
+  font-size: 13px;
+}
+
+.dshf-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* VS Code 式内联输入行（新建/重命名）：accent 边框的输入框 */
+.dshf-node-editing {
+  cursor: default;
+}
+.dshf-inline-input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  color: inherit;
+  background: var(--dsw-alias-bg-primary, #ffffff);
+  border: 1px solid var(--dsw-alias-accent-strong, #4dabf7);
+  border-radius: 4px;
+  padding: 1px 4px;
+  outline: none;
+}
+
+.dshf-node-actions {
+  display: none;
+  margin-left: auto;
+  gap: 2px;
+  flex: none;
+}
+.dshf-node:hover .dshf-node-actions {
+  display: inline-flex;
+}
+
+.dshf-mini {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 0 2px;
+  opacity: 0.7;
+}
+.dshf-mini:hover {
+  opacity: 1;
+}
+
+.dshf-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-top: 1px solid var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.08));
+  flex: none;
+  font-size: 11px;
+  color: var(--dsw-alias-label-tertiary, #868e96);
+  min-height: 22px;
+}
+
+/* Status row placed at the TOP of the editor view (below the toolbar):
+ * the open-file tab strip reads top-down, so the border flips sides. */
+.dshf-status-top {
+  border-top: none;
+  border-bottom: 1px solid var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.08));
+}
+
+.dshf-status-busy {
+  color: var(--dsw-alias-accent-strong, #4dabf7);
+}
+
+.dshf-status-notice {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dshf-hidden {
+  display: none;
+}
+
+/* ── center-column editor view (conversation.view) ───────────────────────── */
+
+/* Renders IN the conversation center column's view area (inside the session
+ * scroll body), alongside chat / trajectory — never a popup. Fills the view
+ * area the session body reserves for the active view.
+ *
+ * The whole view is ONE cohesive surface. Colors come from the editor theme
+ * (themeStore) via CSS custom properties with LIGHT defaults (the default
+ * theme is light), so the chrome always matches the Monaco background
+ * instead of clashing with the page. */
+.dshf-editor-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  position: relative;
+  background: var(--dshf-bg, #ffffff);
+  color: var(--dshf-fg, #1f2328);
+  font-size: 13px;
+}
+
+.dshf-editor-view .dshf-editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--dshf-chrome, #f3f3f3);
+  border-bottom: 1px solid var(--dshf-border, #e0e0e0);
+  flex: none;
+  font-size: 12px;
+  color: var(--dshf-fg, #1f2328);
+}
+
+.dshf-editor-view .dshf-tabname {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--dshf-fg, #1f2328);
+}
+.dshf-editor-view .dshf-dirty {
+  color: var(--dshf-dirty, #c2410c);
+}
+
+.dshf-editor-view .dshf-editor-path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--dshf-muted, #868e96);
+  font-size: 11px;
+}
+
+.dshf-editor-view .dshf-status-top {
+  background: var(--dshf-chrome, #f3f3f3);
+  color: var(--dshf-muted, #868e96);
+}
+
+.dshf-editor-view .dshf-empty {
+  color: var(--dshf-muted, #868e96);
+}
+
+.dshf-editor-view .dshf-monaco {
+  flex: 1;
+  min-height: 0;
+}
+
+.dshf-editor-view .dshf-textarea {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 8px 12px;
+  font-family: var(--dsw-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: var(--dshf-font-size, 13px);
+  line-height: 1.5;
+  background: var(--dshf-bg, #ffffff);
+  color: var(--dshf-fg, #1f2328);
+}
+
+.dshf-editor-view .dshf-btn {
+  color: var(--dshf-fg, #1f2328);
+  border-color: var(--dshf-border, #d0d0d0);
+}
+.dshf-editor-view .dshf-btn:hover {
+  background: var(--dshf-chip, #ececec);
+}
+
+.dshf-editor-view .dshf-tab-chip {
+  background: var(--dshf-chip, #ececec);
+  border-color: var(--dshf-border, #d0d0d0);
+  color: var(--dshf-fg, #1f2328);
+}
+.dshf-editor-view .dshf-tab-chip:hover {
+  background: var(--dshf-border, #c9c9c9);
+}
+.dshf-editor-view .dshf-tab-chip-active {
+  background: var(--dshf-accent, #094771);
+  border-color: var(--dshf-accent, #094771);
+  color: #ffffff;
+}
+.dshf-editor-view .dshf-tab-chip-close:hover {
+  background: var(--dshf-border, rgba(0, 0, 0, 0.1));
+}
+
+/* ── Markdown preview (read-only rendered view) ─────────────────────────── */
+
+.dshf-editor-view .dshf-md-preview {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 20px 32px;
+  font-size: var(--dshf-font-size, 13px);
+  line-height: 1.6;
+  color: var(--dshf-fg, #1f2328);
+  background: var(--dshf-bg, #ffffff);
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+.dshf-editor-view .dshf-md-preview > :first-child {
+  margin-top: 0;
+}
+
+.dshf-editor-view .dshf-md-preview h1,
+.dshf-editor-view .dshf-md-preview h2,
+.dshf-editor-view .dshf-md-preview h3,
+.dshf-editor-view .dshf-md-preview h4 {
+  margin: 1.2em 0 0.5em;
+  line-height: 1.3;
+  color: var(--dshf-fg, #1f2328);
+}
+.dshf-editor-view .dshf-md-preview h1 { font-size: 1.6em; border-bottom: 1px solid var(--dshf-border, #e0e0e0); padding-bottom: 0.3em; }
+.dshf-editor-view .dshf-md-preview h2 { font-size: 1.35em; border-bottom: 1px solid var(--dshf-border, #e0e0e0); padding-bottom: 0.25em; }
+.dshf-editor-view .dshf-md-preview h3 { font-size: 1.15em; }
+.dshf-editor-view .dshf-md-preview h4 { font-size: 1em; }
+
+.dshf-editor-view .dshf-md-preview p {
+  margin: 0.6em 0;
+}
+
+.dshf-editor-view .dshf-md-preview ul,
+.dshf-editor-view .dshf-md-preview ol {
+  margin: 0.6em 0;
+  padding-left: 1.6em;
+}
+
+.dshf-editor-view .dshf-md-preview li {
+  margin: 0.2em 0;
+}
+
+.dshf-editor-view .dshf-md-preview blockquote {
+  margin: 0.8em 0;
+  padding: 0.1em 1em;
+  border-left: 3px solid var(--dshf-border, #d0d0d0);
+  color: var(--dshf-muted, #868e96);
+  background: var(--dshf-chip, #f3f3f3);
+  border-radius: 0 6px 6px 0;
+}
+
+.dshf-editor-view .dshf-md-preview code {
+  font-family: var(--dsw-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 0.92em;
+  background: var(--dshf-chip, #ececec);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+.dshf-editor-view .dshf-md-preview pre {
+  margin: 0.8em 0;
+  padding: 10px 12px;
+  background: var(--dshf-chip, #ececec);
+  border: 1px solid var(--dshf-border, #d0d0d0);
+  border-radius: 8px;
+  overflow: auto;
+}
+.dshf-editor-view .dshf-md-preview pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 0.92em;
+  line-height: 1.5;
+}
+
+.dshf-editor-view .dshf-md-preview a {
+  color: var(--dshf-accent, #094771);
+  text-decoration: none;
+}
+.dshf-editor-view .dshf-md-preview a:hover {
+  text-decoration: underline;
+}
+
+.dshf-editor-view .dshf-md-preview img {
+  max-width: 100%;
+}
+
+.dshf-editor-view .dshf-md-preview table {
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  display: block;
+  overflow: auto;
+  max-width: 100%;
+}
+.dshf-editor-view .dshf-md-preview th,
+.dshf-editor-view .dshf-md-preview td {
+  border: 1px solid var(--dshf-border, #d0d0d0);
+  padding: 4px 10px;
+}
+.dshf-editor-view .dshf-md-preview th {
+  background: var(--dshf-chip, #ececec);
+  font-weight: 600;
+}
+
+.dshf-editor-view .dshf-md-preview hr {
+  border: none;
+  border-top: 1px solid var(--dshf-border, #d0d0d0);
+  margin: 1em 0;
+}
+
+.dshf-editor-view .dshf-md-preview input[type='checkbox'] {
+  margin-right: 0.4em;
+}
+
+/* Toggle button: keep it subtle like the theme button */
+.dshf-editor-view .dshf-md-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 5px;
+}
+.dshf-editor-view .dshf-md-toggle svg {
+  display: block;
+}
+
+/* ── editor theme panel (VS Code style) ──────────────────────────────────── */
+
+.dshf-theme-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.dshf-theme-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  width: 252px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 10px;
+  background: var(--dshf-chrome, #f3f3f3);
+  border: 1px solid var(--dshf-border, #d0d0d0);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  color: var(--dshf-fg, #1f2328);
+  font-size: 12px;
+}
+
+.dshf-theme-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.dshf-theme-label {
+  flex: none;
+  width: 44px;
+  color: var(--dshf-muted, #868e96);
+}
+
+.dshf-theme-select {
+  flex: 1;
+  min-width: 0;
+  background: var(--dshf-chip, #ececec);
+  border: 1px solid var(--dshf-border, #d0d0d0);
+  border-radius: 6px;
+  color: var(--dshf-fg, #1f2328);
+  font-size: 12px;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.dshf-theme-select:focus {
+  outline: none;
+  border-color: var(--dshf-accent, #094771);
+}
+
+.dshf-theme-row input[type='color'] {
+  width: 34px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--dshf-border, #d0d0d0);
+  border-radius: 4px;
+  background: var(--dshf-chip, #ececec);
+  cursor: pointer;
+}
+
+.dshf-theme-hex {
+  font-family: var(--dsw-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 11px;
+  color: var(--dshf-muted, #868e96);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dshf-theme-error {
+  color: var(--dshf-dirty, #c2410c);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.dshf-hidden-input {
+  display: none;
+}
+
+.dshf-theme-fontsize {
+  width: 52px;
+  background: var(--dshf-chip, #ececec);
+  border: 1px solid var(--dshf-border, #d0d0d0);
+  border-radius: 4px;
+  color: var(--dshf-fg, #1f2328);
+  font-size: 12px;
+  padding: 1px 4px;
+}
+
+.dshf-theme-unit {
+  color: var(--dshf-muted, #868e96);
+  font-size: 11px;
+}
+
+.dshf-theme-actions {
+  justify-content: flex-end;
+  border-top: 1px solid var(--dshf-border, rgba(0, 0, 0, 0.1));
+  padding-top: 8px;
+}
+
+.dshf-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--dsw-alias-label-tertiary, #868e96);
+  font-size: 12px;
+}
+
+.dshf-tabs-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  max-width: 60%;
+}
+
+/* One open-file tab: a chip container holding the (clickable) name and a
+ * per-file close "✕". Left-aligned in the status row. */
+.dshf-tab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: 1px solid var(--dsw-alias-border-l2, rgba(0, 0, 0, 0.12));
+  border-radius: 6px;
+  color: var(--dsw-alias-label-secondary, #495057);
+  font-size: 11px;
+  padding: 1px 2px 1px 6px;
+  white-space: nowrap;
+  max-width: 160px;
+}
+.dshf-tab-chip:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.05));
+}
+.dshf-tab-chip-active {
+  background: var(--dsw-alias-interactive-bg-selected, rgba(77, 171, 247, 0.15));
+  border-color: var(--dsw-alias-accent-strong, #4dabf7);
+}
+
+/* Filename part of a tab (click to focus). */
+.dshf-tab-chip-name {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.dshf-tab-chip-name:hover {
+  text-decoration: underline;
+}
+
+/* Per-file close button. */
+.dshf-tab-chip-close {
+  background: transparent;
+  border: none;
+  padding: 0 3px;
+  margin: 0;
+  font-size: 10px;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.55;
+  border-radius: 4px;
+  flex: none;
+}
+.dshf-tab-chip-close:hover {
+  opacity: 1;
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.08));
+}
+
+/* Busy / notice group pushed to the right end of the status row. */
+.dshf-status-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
+}
+
+/* Sidebar footer toggle button */
+.dshf-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--dsw-alias-label-secondary, #495057);
+  cursor: pointer;
+  padding: 6px 10px;
+  flex: 1;
+  min-width: 0;
+}
+.dshf-toggle:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.06));
+}
+
+.dshf-toggle-label {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── sidebar view-tab strip ([工作区] [文件]) ──────────────────────────────
+ * Rendered inside the workspace browser's section header row (replacing the
+ * "工作区" label) and at the top of the file-manager panel wrapper. margin-
+ * right:auto keeps the strip at the row's left while the browser's search /
+ * actions stay right-aligned; no flex-grow so it never stretches vertically
+ * inside the panel wrapper's column layout. */
+.dshf-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  margin-right: auto;
+}
+.dshf-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary, #495057);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  flex: none;
+}
+.dshf-tab:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.06));
+}
+.dshf-tab-active {
+  color: var(--dsw-alias-label-primary, #1f2329);
+  font-weight: 600;
+}
+.dshf-tab-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Wrapper around the file-manager panel while the "文件" tab owns the cell:
+ * hosts the tab strip on top and lets the panel fill the rest. The strip gets
+ * the same 8px side inset as the panel toolbar below it. */
+.dshf-panel-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-top: 4px;
+}
+.dshf-panel-wrap .dshf-tabs {
+  padding: 0 8px;
+}
+
+/* ── context menu (right-click) ─────────────────────────────────────────── */
+.dshf-context-menu {
+  position: fixed;
+  z-index: 2147483002;
+  min-width: 180px;
+  padding: 4px;
+  border: 1px solid var(--dsw-alias-border-l2, rgba(127, 127, 127, 0.35));
+  border-radius: 8px;
+  background: var(--dsw-alias-bg-layer-3, #ffffff);
+  color: var(--dsw-alias-label-primary, inherit);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  font: 13px/1.5 system-ui, sans-serif;
+  user-select: none;
+}
+.dshf-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dshf-menu-item:hover,
+.dshf-menu-item-active {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.08));
+  outline: none;
+}
+.dshf-menu-item-disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.dshf-menu-item-disabled:hover {
+  background: transparent;
+}
+.dshf-menu-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dshf-menu-shortcut {
+  color: var(--dsw-alias-label-tertiary, rgba(0, 0, 0, 0.45));
+  font-size: 11px;
+}
+.dshf-menu-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--dsw-alias-border-l2, rgba(127, 127, 127, 0.25));
+}
+/* Cut-source row: dimmed with a dashed outline (VS Code style). */
+.dshf-node.dshf-cut {
+  opacity: 0.45;
+  outline: 1px dashed var(--dsw-alias-label-dimmed, rgba(127, 127, 127, 0.6));
+  outline-offset: -1px;
+}
