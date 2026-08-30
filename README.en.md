@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.9.0-0969da?style=flat" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.10.0-0969da?style=flat" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4dabf7?style=flat" />
   <a href="https://github.com/oneirictouch/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/oneirictouch/dsh-explorer-editor?style=flat&label=stars" /></a>
@@ -73,7 +73,7 @@ dsh plugin --profile web add dsh-explorer-editor
 Or download the tarball from [Releases](https://github.com/oneirictouch/dsh-explorer-editor/releases) and install it locally (use `--profile desktop` for the desktop app):
 
 ```sh
-dsh plugin --profile web add ./dsh-explorer-editor-0.9.0.tgz
+dsh plugin --profile web add ./dsh-explorer-editor-0.10.0.tgz
 ```
 
 ### Configuration

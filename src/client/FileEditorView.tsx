@@ -538,6 +538,13 @@ function MdModeIcon({ mode }: { mode: MdViewMode }): JSX.Element {
 
 /** Map a file path to a Monaco language id (small built-in subset). */
 function languageOf(path: string): string {
+  const base = path.split('/').pop()?.toLowerCase() ?? '';
+  // Dotfiles and extension-less files: map common ones to a Monaco language so
+  // they open with syntax highlighting instead of plaintext.
+  if (base === '.env' || base.startsWith('.env.')) return 'ini';
+  if (base === '.editorconfig' || base === '.npmrc' || base === '.yarnrc' || base === '.gitconfig' || base === '.gitmodules') return 'ini';
+  if (base === 'makefile' || base === 'gnumakefile') return 'makefile';
+  if (base === 'dockerfile' || base === 'containerfile') return 'dockerfile';
   const ext = path.split('.').pop()?.toLowerCase() ?? '';
   switch (ext) {
     case 'ts': case 'tsx': case 'mts': case 'cts': return 'typescript';
