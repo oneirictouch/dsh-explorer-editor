@@ -117,19 +117,6 @@ export function FileEditorView({ remote, t }: { remote: FileManagerRemote; t: Tr
         <span className={cx('dshf-tabname', active.dirty && 'dshf-dirty')} title={active.path}>
           {active.dirty ? '● ' : ''}{active.path.split('/').pop()}
         </span>
-        <span className="dshf-spacer" />
-        <span className="dshf-editor-path" title={active.path}>{active.path}</span>
-        {isMarkdownPath(active.path) && (
-          <button
-            type="button"
-            className="dshf-btn dshf-md-toggle"
-            title={mdMode === 'preview' ? t('md.sourceTitle') : t('md.previewTitle')}
-            onClick={() => setMdMode(mdMode === 'preview' ? 'source' : 'preview')}
-          >
-            <MdModeIcon mode={mdMode} />
-          </button>
-        )}
-        <ThemeButton t={t} />
         <button
           type="button"
           className="dshf-btn"
@@ -145,6 +132,19 @@ export function FileEditorView({ remote, t }: { remote: FileManagerRemote; t: Tr
             if (activePath !== null) closeTab(activePath);
           }}
         >✕</button>
+        <span className="dshf-spacer" />
+        <span className="dshf-editor-path" title={active.path}>{active.path}</span>
+        {isMarkdownPath(active.path) && (
+          <button
+            type="button"
+            className="dshf-btn dshf-md-toggle"
+            title={mdMode === 'preview' ? t('md.sourceTitle') : t('md.previewTitle')}
+            onClick={() => setMdMode(mdMode === 'preview' ? 'source' : 'preview')}
+          >
+            <MdModeIcon mode={mdMode} />
+          </button>
+        )}
+        <ThemeButton t={t} />
       </div>
       <div className={cx('dshf-status', 'dshf-status-top')}>
         {tabs.length > 0 && (

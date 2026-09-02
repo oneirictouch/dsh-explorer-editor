@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.10.0-0969da?style=flat" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.10.1-0969da?style=flat" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4dabf7?style=flat" />
   <a href="https://github.com/oneirictouch/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/oneirictouch/dsh-explorer-editor?style=flat&label=stars" /></a>
@@ -71,7 +71,7 @@ dsh plugin --profile web add dsh-explorer-editor
 或从 [Releases](https://github.com/oneirictouch/dsh-explorer-editor/releases) 页面下载 tarball 后本地安装（桌面端把 `--profile web` 换成 `--profile desktop`）：
 
 ```sh
-dsh plugin --profile web add ./dsh-explorer-editor-0.10.0.tgz
+dsh plugin --profile web add ./dsh-explorer-editor-0.10.1.tgz
 ```
 
 ### 配置
