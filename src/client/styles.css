@@ -279,6 +279,7 @@
   min-height: 0;
   box-sizing: border-box;
   position: relative;
+  padding-right: var(--dsh-right-inset, 0px);
   background: var(--dshf-bg, #ffffff);
   color: var(--dshf-fg, #1f2328);
   font-size: 13px;

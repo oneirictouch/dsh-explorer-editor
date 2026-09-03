@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.10.1-0969da?style=flat" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.10.2-0969da?style=flat" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4dabf7?style=flat" />
   <a href="https://github.com/oneirictouch/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/oneirictouch/dsh-explorer-editor?style=flat&label=stars" /></a>
@@ -73,7 +73,7 @@ dsh plugin --profile web add dsh-explorer-editor
 Or download the tarball from [Releases](https://github.com/oneirictouch/dsh-explorer-editor/releases) and install it locally (use `--profile desktop` for the desktop app):
 
 ```sh
-dsh plugin --profile web add ./dsh-explorer-editor-0.10.1.tgz
+dsh plugin --profile web add ./dsh-explorer-editor-0.10.2.tgz
 ```
 
 ### Configuration
@@ -86,10 +86,10 @@ The `root` in `cordis.patch.yml` is only the **fallback root when there is no se
       name: 'dsh-explorer-editor'
       config:
         root: !!js process.cwd()   # fallback root only, before the file manager pins the session workspace
-        allowArbitraryRoot: false  # whether setRoot may escape root (see below)
+        allowArbitraryRoot: true   # whether setRoot may escape root (see below)
 ```
 
-> **Security boundary**: `allowArbitraryRoot` defaults to `false`, which restricts `setRoot` to directories under `root`, preventing the RPC from reading files outside the workspace. If your session workspace can live outside `root`, set it to `true` (equivalent to the old behavior). All file operations still respect the workspace boundary — any path escaping the currently pinned root is rejected (including symlink escapes).
+> **Security boundary**: `allowArbitraryRoot` defaults to `true`, so `setRoot` follows the current conversation's workspace (which may live outside `root`). To restrict `setRoot` to directories under `root` (preventing the RPC from reading files outside the workspace), set it to `false`. All file operations still respect the workspace boundary — any path escaping the currently pinned root is rejected (including symlink escapes).
 
 ## Features
 

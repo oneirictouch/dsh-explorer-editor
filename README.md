@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.10.1-0969da?style=flat" /></a>
+  <a href="https://github.com/oneirictouch/dsh-explorer-editor/releases"><img alt="version" src="https://img.shields.io/badge/version-0.10.2-0969da?style=flat" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4dabf7?style=flat" />
   <a href="https://github.com/oneirictouch/dsh-explorer-editor"><img alt="stars" src="https://img.shields.io/github/stars/oneirictouch/dsh-explorer-editor?style=flat&label=stars" /></a>
@@ -71,7 +71,7 @@ dsh plugin --profile web add dsh-explorer-editor
 或从 [Releases](https://github.com/oneirictouch/dsh-explorer-editor/releases) 页面下载 tarball 后本地安装（桌面端把 `--profile web` 换成 `--profile desktop`）：
 
 ```sh
-dsh plugin --profile web add ./dsh-explorer-editor-0.10.1.tgz
+dsh plugin --profile web add ./dsh-explorer-editor-0.10.2.tgz
 ```
 
 ### 配置
@@ -84,10 +84,10 @@ dsh plugin --profile web add ./dsh-explorer-editor-0.10.1.tgz
       name: 'dsh-explorer-editor'
       config:
         root: !!js process.cwd()   # 仅作为打开文件管理器前的兜底根目录
-        allowArbitraryRoot: false  # 是否允许 setRoot 越出 root（见下）
+        allowArbitraryRoot: true   # 是否允许 setRoot 越出 root（见下）
 ```
 
-> **安全边界**：`allowArbitraryRoot` 默认 `false`，此时 `setRoot` 只能把根固定到 `root` 之下的目录，防止通过 RPC 越界读取工作区以外的文件。若你的会话工作区可能位于 `root` 之外，请把它设为 `true`（等价于旧行为）。所有文件操作仍受「工作区边界」约束——路径一旦逃逸出当前固定的根即被拒绝（含 symlink 逃逸）。
+> **安全边界**：`allowArbitraryRoot` 默认 `true`，此时 `setRoot` 跟随当前会话的工作区（可能位于 `root` 之外）。若想限制 `setRoot` 只能把根固定到 `root` 之下（防止通过 RPC 越界读取工作区以外的文件），请把它设为 `false`。所有文件操作仍受「工作区边界」约束——路径一旦逃逸出当前固定的根即被拒绝（含 symlink 逃逸）。
 
 ## 功能
 

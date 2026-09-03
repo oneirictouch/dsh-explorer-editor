@@ -19,6 +19,6 @@
       name: 'dsh-explorer-editor'
       config:
         root: !!js process.cwd()
-        # 默认 false：setRoot 只能把根固定到 root 之下，防止越界读取。
-        # 若当前会话工作区可能位于 root 之外，改为 true（等价于旧行为）。
-        allowArbitraryRoot: false
+        # 默认 true：setRoot 跟随当前会话工作区（可能位于 root 之外）。
+        # 若想限制 setRoot 只能把根固定到 root 之下（防止越界读取），改为 false。
+        allowArbitraryRoot: true
