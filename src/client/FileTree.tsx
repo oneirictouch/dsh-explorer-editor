@@ -105,11 +105,18 @@ export const FileTree = forwardRef<TreeRef, FileTreeProps>(function FileTree(
     [remote],
   );
 
-  // Initial load of the root; root switch drops any pending edit.
+  // Initial load of the root; root switch drops any pending edit. The same
+  // effect also runs on every `refresh()` (rev bump): besides the root, every
+  // expanded directory is reloaded too — a create/delete/rename can hit any
+  // expanded level, and reloading only the root would leave stale children
+  // visible until an SSE event arrives.
   useEffect(() => {
     setEditing(null);
     setMenu(null);
     void loadDir(root);
+    for (const dir of Object.keys(expandedRef.current)) {
+      if (dir !== root) void loadDir(dir);
+    }
   }, [root, rev, loadDir]);
 
   // Live refresh: the host watches the workspace and pushes change events over
