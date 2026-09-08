@@ -487,15 +487,21 @@
   margin-right: 0.4em;
 }
 
-/* Toggle button: keep it subtle like the theme button */
+/* Toggle button: keep it subtle like the theme button (icon + label) */
 .dshf-editor-view .dshf-md-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 5px;
+  gap: 4px;
+  padding: 2px 7px;
+  white-space: nowrap;
 }
 .dshf-editor-view .dshf-md-toggle svg {
   display: block;
+}
+.dshf-editor-view .dshf-md-toggle-label {
+  font-size: 12px;
+  line-height: 1;
 }
 
 /* ── editor theme panel (VS Code style) ──────────────────────────────────── */

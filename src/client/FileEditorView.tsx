@@ -85,6 +85,25 @@ export function FileEditorView({ remote, t }: { remote: FileManagerRemote; t: Tr
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
+  // Ctrl/Cmd+Shift+V toggles Markdown source ⇄ preview (VS Code style, Markdown files only).
+  const mdModeRef = useRef(mdMode);
+  mdModeRef.current = mdMode;
+  const activePathRef = useRef(activePath);
+  activePathRef.current = activePath;
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'v') {
+        const p = activePathRef.current;
+        if (p !== null && isMarkdownPath(p)) {
+          e.preventDefault();
+          setMdMode(mdModeRef.current === 'preview' ? 'source' : 'preview');
+        }
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
   const themeVars: ThemeVars = {
     '--dshf-bg': theme.background,
     '--dshf-fg': theme.foreground,
@@ -127,6 +146,9 @@ export function FileEditorView({ remote, t }: { remote: FileManagerRemote; t: Tr
             onClick={() => setMdMode(mdMode === 'preview' ? 'source' : 'preview')}
           >
             <MdModeIcon mode={mdMode} />
+            <span className="dshf-md-toggle-label">
+              {mdMode === 'preview' ? t('md.showSource') : t('md.showPreview')}
+            </span>
           </button>
         )}
         <ThemeButton t={t} />

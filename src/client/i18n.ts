@@ -88,6 +88,8 @@ export const zh = {
   'editor.loading': '编辑器加载中…',
   'md.previewTitle': '预览渲染效果',
   'md.sourceTitle': '编辑源码',
+  'md.showPreview': '预览',
+  'md.showSource': '源码',
   // theme panel
   'theme.button': '主题',
   'theme.title': '编辑器主题设置',
@@ -169,6 +171,8 @@ export const en: Record<keyof typeof zh, string> = {
   'editor.loading': 'Loading editor…',
   'md.previewTitle': 'Preview rendered output',
   'md.sourceTitle': 'Edit source',
+  'md.showPreview': 'Preview',
+  'md.showSource': 'Source',
   'theme.button': 'Theme',
   'theme.title': 'Editor theme settings',
   'theme.panelLabel': 'Editor theme',
