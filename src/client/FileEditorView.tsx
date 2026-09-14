@@ -39,6 +39,13 @@ import {
 /** CSS custom properties the chrome styles read from. */
 type ThemeVars = Record<string, string>;
 
+/**
+ * Per-file Monaco view state (scroll position, cursor, folded regions).
+ * `EditorPane` is keyed by path, so its Monaco instance is re-created on every
+ * tab switch; without this the viewport resets to the top of the file.
+ */
+const viewStates = new Map<string, unknown>();
+
 export function FileEditorView({ remote, t }: { remote: FileManagerRemote; t: Translator }): JSX.Element {
   const tabs = useTabs();
   const activePath = useActivePath();
@@ -359,7 +366,7 @@ function EditorPane({ path, content, onChange, theme, t }: {
   const [mode, setMode] = useState<'loading' | 'monaco' | 'textarea'>('loading');
   const [monacoLib, setMonacoLib] = useState<unknown>(null);
   const hostRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<{ dispose(): void; getValue(): string; onDidChangeModelContent(fn: () => void): void; updateOptions?(opts: Record<string, unknown>): void } | null>(null);
+  const editorRef = useRef<{ dispose(): void; getValue(): string; onDidChangeModelContent(fn: () => void): void; updateOptions?(opts: Record<string, unknown>): void; saveViewState(): unknown; restoreViewState(state: unknown): void } | null>(null);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   const initialRef = useRef(content);
@@ -388,7 +395,7 @@ function EditorPane({ path, content, onChange, theme, t }: {
     const initial = initialRef.current;
     const monacoAny = monacoLib as unknown as {
       editor: {
-        create(el: HTMLElement, options: Record<string, unknown>): { dispose(): void; getValue(): string; onDidChangeModelContent(fn: () => void): void; updateOptions(opts: Record<string, unknown>): void };
+        create(el: HTMLElement, options: Record<string, unknown>): { dispose(): void; getValue(): string; onDidChangeModelContent(fn: () => void): void; updateOptions(opts: Record<string, unknown>): void; saveViewState(): unknown; restoreViewState(state: unknown): void };
       };
     };
     const editor = monacoAny.editor.create(hostRef.current, {
@@ -400,9 +407,14 @@ function EditorPane({ path, content, onChange, theme, t }: {
       scrollBeyondLastLine: false,
       tabSize: 2,
     });
+    // Restore the previous scroll position / cursor for this file.
+    const savedViewState = viewStates.get(path);
+    if (savedViewState !== undefined) editor.restoreViewState(savedViewState);
     editor.onDidChangeModelContent(() => onChangeRef.current(editor.getValue()));
     editorRef.current = editor;
     return () => {
+      // Remember where the user was before this instance is torn down.
+      viewStates.set(path, editor.saveViewState());
       editor.dispose();
       editorRef.current = null;
     };
