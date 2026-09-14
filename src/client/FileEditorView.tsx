@@ -592,6 +592,7 @@ function languageOf(path: string): string {
     case 'php': return 'php';
     case 'vue': return 'html';
     case 'svelte': return 'html';
+    case 'abap': return 'abap';
     default: return 'plaintext';
   }
 }
